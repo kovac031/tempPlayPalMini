@@ -1,0 +1,59 @@
+﻿@model IEnumerable<PlayPalMini.MVC.Models.BoardGameView>
+
+
+@{
+    ViewBag.Title = "GetAllBoardGamesAsync";
+}
+
+<h2>GetAllBoardGames</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm("GetAllBoardGamesAsync", "BoardGameNoPaging", FormMethod.Get))
+{
+    <div>
+        <input type="text" name="filterby" placeholder="Search..." value="@Request.QueryString["filterby"]" />
+
+        <button type="submit">Search</button>
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Title", "GetAllBoardGamesAsync", new { sorting = ViewBag.SortByTitle })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.ActionLink("Rating", "GetAllBoardGamesAsync", new { sorting = ViewBag.SortByRating })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvgRating)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+

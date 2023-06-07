@@ -1,0 +1,57 @@
+﻿@using PagedList
+@using PagedList.Mvc
+
+@using PlayPalMini.Model
+@using PlayPalMini.MVC.Models
+
+@model IPagedList<BoardGameView>
+
+@{
+    ViewBag.Title = "Board Games";
+}
+
+<h2>Board Games</h2>
+
+@using (Html.BeginForm("GetAllBoardGamesAsync", "BoardGame", FormMethod.Get))
+{
+    <div>
+        <label for="filterby">Filter by:</label>
+        <input type="text" name="filterby" value="@ViewBag.CurrentFilter" />
+        <input type="submit" value="Filter" />
+        @if (!string.IsNullOrEmpty(ViewBag.CurrentFilter))
+        {
+            <a href="@Url.Action("GetAllBoardGamesAsync", "BoardGame")">Clear filter</a>
+        }
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Title", "GetAllBoardGamesAsync", new { sorting = ViewBag.SortByTitle, filterby = ViewBag.CurrentFilter, page = ViewBag.CurrentPage })
+            </th>
+            <th>
+                @Html.ActionLink("Rating", "GetAllBoardGamesAsync", new { sorting = ViewBag.SortByRating, filterby = ViewBag.CurrentFilter, page = ViewBag.CurrentPage })
+            </th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.AvgRating)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.PageCount > 1)
+{
+    <div class="pager">
+        @Html.PagedListPager(Model, page => Url.Action("GetAllBoardGamesAsync", new { page, sorting = ViewBag.CurrentSort, filterby = ViewBag.CurrentFilter }))
+    </div>
+}
